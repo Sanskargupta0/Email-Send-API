@@ -108,7 +108,7 @@ Sends a quotation email with the provided product details.
 
 ## Starting the project
 
-Open the [.env.example](/.env.example) and fill in your Rapid API key then save it as .env 
+Open the [.env.example](/.env.example) and fill in your key then save it as .env 
 
 ```plaintext
 CLIENT_ID="Your Client Id"
@@ -128,12 +128,12 @@ git clone https://github.com/Sanskargupta0/Email-Send-API.git
 cd Email-Send-API
 npm install
 # then to run the server
-npm node index.js
+node index.js
 ```
 
 ## Demo
 
-Check out the live API Endpoint of [SendMail API](https://sendmail-api.vercel.app/) for a demo. You can use the provided endpoints to send emails with attachments and customize the email templates. The API is designed to be secure and reliable, with support for OAuth2 for Gmail integration and environment variables for configuration. The project is built with Node.js and Express, and is designed to be scalable and maintainable. The API is also designed to be easy to use and integrate with other applications, making it a popular choice for businesses and organizations looking to send dynamic emails. The project is also designed to be easy to maintain and update
+Check out the live API Endpoint of [SendMail API](https://email-send-api-67qp.onrender.com/) for a demo. You can use the provided endpoints to send emails with attachments and customize the email templates. The API is designed to be secure and reliable, with support for OAuth2 for Gmail integration and environment variables for configuration. The project is built with Node.js and Express, and is designed to be scalable and maintainable. The API is also designed to be easy to use and integrate with other applications, making it a popular choice for businesses and organizations looking to send dynamic emails. The project is also designed to be easy to maintain and update
 
 ## Screenshots
 
