@@ -21,8 +21,8 @@ async function sendMail(template, data) {
     const date = new Date().toLocaleDateString();
     const accessToken = await oAuth2Client.getAccessToken();
     if (template == "subscribe") {
-      subject = "Thank You for Subscribing to Print360!";
-      text = `
+      userSubject = "Thank You for Subscribing to Print360!";
+      userText = `
 Thank You for Subscribing!
 
 Hey
@@ -38,7 +38,7 @@ Print360
 Noida, Uttar Pradesh 226013.
 Copyright © 2024. All rights reserved.
       `;
-      html = `
+      userHtml = `
       <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -223,8 +223,8 @@ Copyright © 2024. All rights reserved.
 </html>
   
       `;
-      userSubject = "Subscription Confirmation - Form Submission Received";
-      userText = `
+      subject = "Subscription Confirmation - Form Submission Received";
+      text = `
       Subject: Subscription Confirmation - Form Submission Received
       Hello,${date}
       You have received a new message through the subscription form.
@@ -233,10 +233,10 @@ Copyright © 2024. All rights reserved.
       Thank you,
       The Print360 Team
       Print360
-      Sitapur, Hardoi Bypass Rd, Lucknow, Uttar Pradesh 226013.
+      Noida, Uttar Pradesh 226013.
       Copyright © 2024. All rights reserved.
       `;
-      userHtml = `
+      html = `
       <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -376,7 +376,7 @@ Copyright © 2024. All rights reserved.
           Print360
         </p>
         <p style="margin: 4px 0;">
-          Sitapur, Hardoi Bypass Rd, Lucknow, Uttar Pradesh 226013.
+          Noida, Uttar Pradesh 226013.
         </p>
         <p style="margin: 4px 0;">
           Copyright © 2024. All rights reserved.
@@ -387,8 +387,8 @@ Copyright © 2024. All rights reserved.
 </html>
       `;
     } else if (template == "contact") {
-      subject = "Thank You for Contacting Print360!";
-      text = `
+      userSubject = "Thank You for Contacting Print360!";
+      userText = `
       Thank You for Contacting!
       ${date}
       ${data.name}
@@ -398,7 +398,7 @@ Copyright © 2024. All rights reserved.
       Print360Official.help@gmail.com
       </a>
       `;
-      html = `
+      userHtml = `
       <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -587,8 +587,8 @@ Copyright © 2024. All rights reserved.
   </body>
 </html>
       `;
-      userSubject = "Contact Us - Form Submission Received";
-      userText = `
+      subject = "Contact Us - Form Submission Received";
+      text = `
       Subject: New Contact Form Submission Received
 
 Hello,${date}
@@ -608,12 +608,12 @@ Thank you,
 The Print360 Team
 
 Print360
-Sitapur, Hardoi Bypass Rd, Lucknow, Uttar Pradesh 226013.
+Noida, Uttar Pradesh 226013.
 
 Copyright © 2024. All rights reserved.
 
       `;
-      userHtml = `
+      html = `
       <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -781,7 +781,7 @@ Copyright © 2024. All rights reserved.
           Print360
         </p>
         <p style="margin: 0; margin-top: 8px; color: #434343;">
-          Sitapur, Hardoi Bypass Rd, Lucknow, Uttar Pradesh 226013.
+          Noida, Uttar Pradesh 226013.
         </p>
 
         <p style="margin: 0; margin-top: 16px; color: #434343;">
@@ -792,6 +792,421 @@ Copyright © 2024. All rights reserved.
   </body>
 </html>
 
+      `;
+    } else if (template == "quotation") {
+      userSubject = "Thank You for Requesting a Quotation with Print360!";
+      userText = `
+      Subject: Thank You for Your Quotation Request with Print360
+
+Print360
+Noida, Uttar Pradesh 226013.
+
+Date: ${date}
+
+Dear ${data.name},
+
+Thank you for your request! We have received your quotation request and will get back to you shortly.
+
+Request Summary:
+- Request ID: ${data.id}
+- Product Name: ${data.productName}
+- Dimensions (L x W): ${data.lengthh} x ${data.width}
+- Quantity: ${data.quantity}
+- Material: ${data.material || "N/A"}
+- Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
+- Extra: ${data.extra.length > 0 ? data.extra.join(", ") : "N/A"}
+- Note: ${data.note || "N/A"}
+- Artwork: ${data.artwork ? "Attached" : "No artwork provided"}
+
+If you have any questions or need further assistance, please feel free to reach out to us at Print360Official.help@gmail.com.
+
+Thank you for choosing Print360.
+
+Print360 Team
+Copyright © 2024. All rights reserved.
+      `;
+      userHtml = `
+      <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Quotation Request Received</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    style="
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      font-size: 14px;
+    "
+  >
+    <div
+      style="
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 45px 30px 60px;
+        background: #f4f7ff;
+        background-image: url(https://img.freepik.com/free-photo/paper-texture-background_53876-64550.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: top center;
+        font-size: 14px;
+        color: #434343;
+      "
+    >
+      <header>
+        <table style="width: 100%;">
+          <tbody>
+            <tr style="height: 0;">
+              <td
+                style="
+                  align-items: center;
+                  display: flex;
+                  font-size: 50px;
+                  font-weight: bold;
+                "
+              >
+                <img
+                  alt="Logo"
+                  src="https://i.postimg.cc/MTpYx13B/logo.png"
+                  height="100px"
+                />
+                <span style="padding-top: 10px;">Print360</span>
+              </td>
+              <td style="text-align: right;">
+                <span
+                  style="font-size: 16px; line-height: 30px; font-weight: bolder;"
+                  >${date}</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </header>
+
+      <main>
+        <div
+          style="
+            margin: 0;
+            margin-top: 60px;
+            padding: 92px 30px 115px;
+            background: #ffffff;
+            border-radius: 30px;
+            text-align: center;
+          "
+        >
+          <div style="width: 100%; max-width: 489px; margin: 0 auto;">
+            <h1
+              style="
+                margin: 0;
+                font-size: 24px;
+                font-weight: 500;
+                color: #1f1f1f;
+              "
+            >
+              Thank You for Your Request!
+            </h1>
+            <p
+              style="
+                margin: 0;
+                margin-top: 17px;
+                font-size: 16px;
+                font-weight: 500;
+              "
+            >
+              We have received your quotation request and will get back to you shortly.
+            </p>
+            <div
+              style="
+                margin: 0;
+                margin-top: 40px;
+                font-size: 16px;
+                font-weight: 500;
+                text-align: left;
+              "
+            >
+              <p><strong>Request ID:</strong> ${data.id}</p>
+              <p><strong>Product Name:</strong> ${data.productName}</p>
+              <p><strong>Dimensions (L x W):</strong> ${data.lengthh} x ${
+        data.width
+      }</p>
+              <p><strong>Quantity:</strong> ${data.quantity}</p>
+              <p><strong>Material:</strong> ${data.material || "N/A"}</p>
+              <p><strong>Finishes:</strong> ${
+                data.finishes.length ? data.finishes.join(", ") : "N/A"
+              }</p>
+              <p><strong>Extra:</strong> ${
+                data.extra.length ? data.extra.join(", ") : "N/A"
+              }</p>
+              <p><strong>Note:</strong> ${data.note || "N/A"}</p>
+              <p><strong>Artwork:</strong> ${
+                data.artwork ? "Attached" : "No artwork provided"
+              }</p>
+            </div>
+          </div>
+        </div>
+
+        <p
+          style="
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 90px;
+            text-align: center;
+            font-weight: 500;
+            color: #8c8c8c;
+          "
+        >
+          If you have any questions, feel free to reach out at
+          <a
+            href="mailto:Print360Official.help@gmail.com"
+            style="color: #499fb6; text-decoration: none;"
+            >Print360Official.help@gmail.com</a
+          >
+        </p>
+      </main>
+
+      <footer
+        style="
+          width: 100%;
+          max-width: 490px;
+          margin: 20px auto 0;
+          text-align: center;
+          border-top: 1px solid #e6ebf1;
+        "
+      >
+        <p
+          style="
+            margin: 0;
+            margin-top: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #434343;
+          "
+        >
+          Print360
+        </p>
+        <p style="margin: 0; margin-top: 8px; color: #434343;">
+         Noida, Uttar Pradesh 226013.
+        </p>
+
+        <p style="margin: 0; margin-top: 16px; color: #434343;">
+          Copyright © 2024. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
+      `;
+      subject = "Quotation Request - Form Submission Received";
+      text = `
+Subject: New Quotation Request Received
+
+Print360 Internal Notification
+
+Date: ${date}
+
+Quotation Request Details:
+- Request ID: ${data.id}
+- Product Name: ${data.productName}
+- Dimensions (L x W): ${data.lengthh} x ${data.width}
+- Quantity: ${data.quantity}
+- Material: ${data.material || "N/A"}
+- Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
+- Extra: ${data.extra.length > 0 ? data.extra.join(", ") : "N/A"}
+- Note: ${data.note || "N/A"}
+
+Customer Information:
+- Name: ${data.name}
+- Email: ${data.email}
+- Phone: ${data.phone}
+
+Please follow up as needed.
+      `;
+      html = `
+      <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>New Quotation Request</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    style="
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      font-size: 14px;
+    "
+  >
+    <div
+      style="
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 45px 30px 60px;
+        background: #f4f7ff;
+        background-image: url(https://img.freepik.com/premium-vector/blue-background-with-message-heart_405287-81.jpg?w=1380);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: top center;
+        font-size: 14px;
+        color: #434343;
+      "
+    >
+      <header>
+        <table style="width: 100%;">
+          <tbody>
+            <tr style="height: 0;">
+              <td
+                style="
+                  align-items: center;
+                  display: flex;
+                  font-size: 50px;
+                  font-weight: bold;
+                "
+              >
+                <img
+                  alt="Logo"
+                  src="https://i.postimg.cc/MTpYx13B/logo.png"
+                  height="100px"
+                />
+                <span style="padding-top: 10px;">Print360</span>
+              </td>
+              <td style="text-align: right;">
+                <span
+                  style="font-size: 16px; line-height: 30px; font-weight: bolder;"
+                  >${date}</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </header>
+
+      <main>
+        <div
+          style="
+            margin: 0;
+            margin-top: 60px;
+            padding: 92px 30px 115px;
+            background: #ffffff;
+            border-radius: 30px;
+            text-align: left;
+          "
+        >
+          <div style="width: 100%; max-width: 489px; margin: 0 auto;">
+            <h1
+              style="
+                margin: 0;
+                font-size: 24px;
+                font-weight: 500;
+                color: #1f1f1f;
+              "
+            >
+              New Quotation Request
+            </h1>
+            <p
+              style="
+                margin: 0;
+                margin-top: 17px;
+                font-size: 16px;
+                font-weight: 500;
+              "
+            >
+              Details of the new quotation request:
+            </p>
+            <div
+              style="
+                margin: 0;
+                margin-top: 40px;
+                font-size: 16px;
+                font-weight: 500;
+              "
+            >
+              <p><strong>ID:</strong> ${data.id}</p>
+              <p><strong>Product Name:</strong> ${data.productName}</p>
+              <p><strong>Dimensions (L x W):</strong> ${data.lengthh} x ${
+        data.width
+      }</p>
+              <p><strong>Quantity:</strong> ${data.quantity}</p>
+              <p><strong>Material:</strong> ${data.material || "N/A"}</p>
+              <p><strong>Finishes:</strong> ${
+                data.finishes.length ? data.finishes.join(", ") : "N/A"
+              }</p>
+              <p><strong>Extra:</strong> ${
+                data.extra.length ? data.extra.join(", ") : "N/A"
+              }</p>
+              <p><strong>Note:</strong> ${data.note || "N/A"}</p>
+              <p><strong>Contact Person:</strong> ${data.name}</p>
+              <p><strong>Email:</strong> ${data.email}</p>
+              <p><strong>Phone:</strong> ${data.phone}</p>
+              <p><strong>Artwork:</strong> ${
+                data.artwork ? "Attached" : "No artwork provided"
+              }</p>
+            </div>
+          </div>
+        </div>
+
+        <p
+          style="
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 90px;
+            text-align: center;
+            font-weight: 500;
+            color: #8c8c8c;
+          "
+        >
+          Need assistance? Contact us at
+          <a
+            href="mailto:Print360Official.help@gmail.com"
+            style="color: #499fb6; text-decoration: none;"
+            >Print360Official.help@gmail.com</a
+          >
+        </p>
+      </main>
+
+      <footer
+        style="
+          width: 100%;
+          max-width: 490px;
+          margin: 20px auto 0;
+          text-align: center;
+          border-top: 1px solid #e6ebf1;
+        "
+      >
+        <p
+          style="
+            margin: 0;
+            margin-top: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #434343;
+          "
+        >
+          Print360
+        </p>
+        <p style="margin: 0; margin-top: 8px; color: #434343;">
+          Noida, Uttar Pradesh 226013.
+        </p>
+
+        <p style="margin: 0; margin-top: 16px; color: #434343;">
+          Copyright © 2024. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
       `;
     } else {
       console.log("Invalid template");
@@ -809,23 +1224,25 @@ Copyright © 2024. All rights reserved.
       },
     });
 
-    const mailOptions = {
+    const internalMailOptions = {
       from: "Print360🖨️<Print360Official.help@gmail.com>",
-      to: data.email,
+      to: cc,
       subject: subject,
       text: text,
       html: html,
+      attachments: data.artwork ? [{ filename: 'artwork-file', path: data.artwork }] : []
     };
 
     const userMailOptions = {
       from: "Print360🖨️<Print360Official.help@gmail.com>",
-      to: cc,
+      to: data.email,
       subject: userSubject,
       text: userText,
       html: userHtml,
+      attachments: data.artwork ? [{ filename: 'artwork-file', path: artwork }] : []
     };
 
-    const result = await transport.sendMail(mailOptions);
+    const result = await transport.sendMail(internalMailOptions);
     const userResult = await transport.sendMail(userMailOptions);
 
     // Check if both emails were accepted for delivery
@@ -835,7 +1252,7 @@ Copyright © 2024. All rights reserved.
       return false;
     }
   } catch (error) {
-    console.error('Error in sendMail function:', error);
+    console.error("Error in sendMail function:", error);
     return false;
   }
 }
