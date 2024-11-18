@@ -1,10 +1,16 @@
 require("dotenv").config();
 const express = require('express');
 const sendMail = require('./sendmail');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ limit: "1mb", extended: true }));
+
+const upload = multer({
+    dest: 'uploads/'
+  });
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONTEND_URL}`);
@@ -73,14 +79,32 @@ app.post('/contact-email', async (req, res) => {
     }
 });
 
-app.post('/quotation-email', (req, res) => {
-    const { id, productName, lengthh, width, quantity, material, finishes, extra, note, artwork, name, email, phone } = req.body;
+app.post('/quotation-email', upload.single('artwork'), (req, res) => {
+    const { id, productName, lengthh, width, height, quantity, material, finishes, extra, note, artworkName, name, email, phone } = req.body;
     // Validate input
-    if (!name || !email || !phone || !id || !productName || !lengthh || !width || !quantity) {
-        return res.status(400).json({ message: 'name, email, phone, id, productName, length, width, quantity are required' })
+    if (!name || !email || !phone || !id || !productName || !lengthh || !width || !height || !quantity) {
+        return res.status(400).json({ message: 'name, email, phone, id, productName, length, width, height, quantity are required' })
     }
+    const artworkFile = req.file;
     try {
-     const emailSent = sendMail("quotation", { id, productName, lengthh, width, quantity, material, finishes, extra, note, artwork, name, email, phone });   
+        const dataToSend = {
+            id,
+            productName,
+            lengthh,
+            width,
+            height,
+            quantity,
+            material,
+            finishes: finishes ? JSON.parse(finishes) : [],
+            extra: extra ? JSON.parse(extra) : [],
+            note,
+            name,
+            email,
+            phone,
+            artwork: artworkFile ? path.resolve(artworkFile.path) : null,
+            artworkName
+          };
+     const emailSent = sendMail("quotation", dataToSend);   
         
         if (emailSent) {
             res.status(200).json({ message: 'Email sent successfully' });

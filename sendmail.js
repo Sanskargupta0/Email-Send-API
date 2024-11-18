@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const fs = require("fs");
 
 const ClientId = process.env.CLIENT_ID;
 const ClientSecret = process.env.CLIENT_SECRET;
@@ -810,7 +811,7 @@ Thank you for your request! We have received your quotation request and will get
 Request Summary:
 - Request ID: ${data.id}
 - Product Name: ${data.productName}
-- Dimensions (L x W): ${data.lengthh} x ${data.width}
+- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${data.height}
 - Quantity: ${data.quantity}
 - Material: ${data.material || "N/A"}
 - Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
@@ -933,8 +934,8 @@ Copyright © 2024. All rights reserved.
             >
               <p><strong>Request ID:</strong> ${data.id}</p>
               <p><strong>Product Name:</strong> ${data.productName}</p>
-              <p><strong>Dimensions (L x W):</strong> ${data.lengthh} x ${
-        data.width
+              <p><strong>Dimensions (L x W x H):</strong> ${data.lengthh} x ${
+        data.width} x ${data.height
       }</p>
               <p><strong>Quantity:</strong> ${data.quantity}</p>
               <p><strong>Material:</strong> ${data.material || "N/A"}</p>
@@ -1014,7 +1015,7 @@ Date: ${date}
 Quotation Request Details:
 - Request ID: ${data.id}
 - Product Name: ${data.productName}
-- Dimensions (L x W): ${data.lengthh} x ${data.width}
+- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${data.height}
 - Quantity: ${data.quantity}
 - Material: ${data.material || "N/A"}
 - Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
@@ -1135,8 +1136,8 @@ Please follow up as needed.
             >
               <p><strong>ID:</strong> ${data.id}</p>
               <p><strong>Product Name:</strong> ${data.productName}</p>
-              <p><strong>Dimensions (L x W):</strong> ${data.lengthh} x ${
-        data.width
+              <p><strong>Dimensions (L x W x H):</strong> ${data.lengthh} x ${
+        data.width} x ${data.height}
       }</p>
               <p><strong>Quantity:</strong> ${data.quantity}</p>
               <p><strong>Material:</strong> ${data.material || "N/A"}</p>
@@ -1230,7 +1231,7 @@ Please follow up as needed.
       subject: subject,
       text: text,
       html: html,
-      attachments: data.artwork ? [{ filename: 'artwork-file', path: data.artwork }] : []
+      attachments: data.artwork ? [{ filename: data.artworkName, path: data.artwork }] : []
     };
 
     const userMailOptions = {
@@ -1239,11 +1240,15 @@ Please follow up as needed.
       subject: userSubject,
       text: userText,
       html: userHtml,
-      attachments: data.artwork ? [{ filename: 'artwork-file', path: artwork }] : []
+      attachments: data.artwork ? [{ filename: data.artworkName, path: data.artwork }] : []
     };
 
     const result = await transport.sendMail(internalMailOptions);
     const userResult = await transport.sendMail(userMailOptions);
+
+    if(data.artwork) {
+      fs.unlinkSync(data.artwork);
+    }
 
     // Check if both emails were accepted for delivery
     if (result.accepted.length > 0 && userResult.accepted.length > 0) {
