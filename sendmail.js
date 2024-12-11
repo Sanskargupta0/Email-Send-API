@@ -795,6 +795,50 @@ Copyright © 2024. All rights reserved.
 
       `;
     } else if (template == "quotation") {
+      const dynamicSummary = data.dynamicFields
+        .map((field) => {
+          const key = Object.keys(field)[0]; // Get the key (e.g., 'material', 'finishes', 'extra')
+          const value = field[key];
+          if (Array.isArray(value)) {
+            // For arrays like 'extra'
+            return `- ${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+              value.length > 0 ? value.map((v) => v.name).join(", ") : "N/A"
+            }`;
+          } else if (typeof value === "object") {
+            // For objects like 'material' and 'finishes'
+            return `- ${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+              value.name || "N/A"
+            }`;
+          }
+          return `- ${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+            value || "N/A"
+          }`;
+        })
+        .join("\n");
+
+      const dynamicHtmlSummary = data.dynamicFields
+        .map((field) => {
+          const key = Object.keys(field)[0]; // Get the key name dynamically
+          const value = field[key];
+          if (Array.isArray(value)) {
+            // Handle arrays like 'extra'
+            return `<p><strong>${
+              key.charAt(0).toUpperCase() + key.slice(1)
+            }:</strong> ${
+              value.length > 0 ? value.map((v) => v.name).join(", ") : "N/A"
+            }</p>`;
+          } else if (typeof value === "object") {
+            // Handle objects like 'material' and 'finishes'
+            return `<p><strong>${
+              key.charAt(0).toUpperCase() + key.slice(1)
+            }:</strong> ${value.name || "N/A"}</p>`;
+          }
+          return `<p><strong>${
+            key.charAt(0).toUpperCase() + key.slice(1)
+          }:</strong> ${value || "N/A"}</p>`;
+        })
+        .join("");
+
       userSubject = "Thank You for Requesting a Quotation with Print360!";
       userText = `
       Subject: Thank You for Your Quotation Request with Print360
@@ -811,11 +855,12 @@ Thank you for your request! We have received your quotation request and will get
 Request Summary:
 - Request ID: ${data.id}
 - Product Name: ${data.productName}
-- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${data.height}
+- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${
+        data.height ? data.height : "N/A"
+      }
 - Quantity: ${data.quantity}
-- Material: ${data.material || "N/A"}
-- Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
-- Extra: ${data.extra.length > 0 ? data.extra.join(", ") : "N/A"}
+${dynamicSummary}
+- Estimated Cost: ${data.estimatedPrice}
 - Note: ${data.note || "N/A"}
 - Artwork: ${data.artwork ? "Attached" : "No artwork provided"}
 
@@ -935,16 +980,11 @@ Copyright © 2024. All rights reserved.
               <p><strong>Request ID:</strong> ${data.id}</p>
               <p><strong>Product Name:</strong> ${data.productName}</p>
               <p><strong>Dimensions (L x W x H):</strong> ${data.lengthh} x ${
-        data.width} x ${data.height
-      }</p>
+        data.width
+      } x ${data.height ? data.height : "N/A"}</p>
               <p><strong>Quantity:</strong> ${data.quantity}</p>
-              <p><strong>Material:</strong> ${data.material || "N/A"}</p>
-              <p><strong>Finishes:</strong> ${
-                data.finishes.length ? data.finishes.join(", ") : "N/A"
-              }</p>
-              <p><strong>Extra:</strong> ${
-                data.extra.length ? data.extra.join(", ") : "N/A"
-              }</p>
+              ${dynamicHtmlSummary}
+              <p><strong>Estimated Cost:</strong> ${data.estimatedPrice}</p>
               <p><strong>Note:</strong> ${data.note || "N/A"}</p>
               <p><strong>Artwork:</strong> ${
                 data.artwork ? "Attached" : "No artwork provided"
@@ -1015,12 +1055,14 @@ Date: ${date}
 Quotation Request Details:
 - Request ID: ${data.id}
 - Product Name: ${data.productName}
-- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${data.height}
+- Dimensions (L x W x H): ${data.lengthh} x ${data.width} x ${
+        data.height ? data.height : "N/A"
+      }
 - Quantity: ${data.quantity}
-- Material: ${data.material || "N/A"}
-- Finishes: ${data.finishes.length > 0 ? data.finishes.join(", ") : "N/A"}
-- Extra: ${data.extra.length > 0 ? data.extra.join(", ") : "N/A"}
+${dynamicSummary}
+- Estimated Cost: ${data.estimatedPrice}
 - Note: ${data.note || "N/A"}
+- Artwork: ${data.artwork ? "Attached" : "No artwork provided"}
 
 Customer Information:
 - Name: ${data.name}
@@ -1137,16 +1179,11 @@ Please follow up as needed.
               <p><strong>ID:</strong> ${data.id}</p>
               <p><strong>Product Name:</strong> ${data.productName}</p>
               <p><strong>Dimensions (L x W x H):</strong> ${data.lengthh} x ${
-        data.width} x ${data.height}
-      }</p>
+        data.width
+      } x ${data.height ? data.height : "N/A"}</p>
               <p><strong>Quantity:</strong> ${data.quantity}</p>
-              <p><strong>Material:</strong> ${data.material || "N/A"}</p>
-              <p><strong>Finishes:</strong> ${
-                data.finishes.length ? data.finishes.join(", ") : "N/A"
-              }</p>
-              <p><strong>Extra:</strong> ${
-                data.extra.length ? data.extra.join(", ") : "N/A"
-              }</p>
+              ${dynamicHtmlSummary}
+              <p><strong>Estimated Cost:</strong> ${data.estimatedPrice}</p>
               <p><strong>Note:</strong> ${data.note || "N/A"}</p>
               <p><strong>Contact Person:</strong> ${data.name}</p>
               <p><strong>Email:</strong> ${data.email}</p>
@@ -1231,7 +1268,9 @@ Please follow up as needed.
       subject: subject,
       text: text,
       html: html,
-      attachments: data.artwork ? [{ filename: data.artworkName, path: data.artwork }] : []
+      attachments: data.artwork
+        ? [{ filename: data.artworkName, path: data.artwork }]
+        : [],
     };
 
     const userMailOptions = {
@@ -1240,13 +1279,15 @@ Please follow up as needed.
       subject: userSubject,
       text: userText,
       html: userHtml,
-      attachments: data.artwork ? [{ filename: data.artworkName, path: data.artwork }] : []
+      attachments: data.artwork
+        ? [{ filename: data.artworkName, path: data.artwork }]
+        : [],
     };
 
     const result = await transport.sendMail(internalMailOptions);
     const userResult = await transport.sendMail(userMailOptions);
 
-    if(data.artwork) {
+    if (data.artwork) {
       fs.unlinkSync(data.artwork);
     }
 
