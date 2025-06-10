@@ -55,6 +55,28 @@ app.post("/subscribe-email", async (req, res) => {
   }
 });
 
+app.post("/contact-number", async (req, res) => {
+  const { mobile } = req.body;
+  // Validate input
+  if (!mobile) {
+    return res.status(400).json({ message: "Mobile number is required" });
+  }
+  try {
+    // Send mail and check response
+    const emailSent = await sendMail("contact-number", { mobile });
+    if (emailSent) {
+      res.status(200).json({ message: "" });
+    } else {
+      res.status(500).json({ message: "Failed to send email" });
+    }
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while sending the email" });
+  }
+});
+
 app.post("/contact-email", async (req, res) => {
   const { name, email, message, subject, mobile } = req.body;
 

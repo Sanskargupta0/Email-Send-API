@@ -387,6 +387,171 @@ Copyright © 2024. All rights reserved.
   </body>
 </html>
       `;
+    } else if (template == "contact-number") {
+      subject = "Contact Number Submission Received";
+      text = `
+      Subject: Contact Number Submission Received
+      Hello,${date}
+      You have received a new contact number submission.
+      Mobile Number: ${data.mobile}
+      Need to follow up? Contact us at Print360Official.help@gmail.com.
+      Thank you,
+      The Print360 Team
+      Print360
+      Noida, Uttar Pradesh 226013.
+      Copyright © 2024. All rights reserved.
+      `;
+      html = `
+      <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Contact Number Submission</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    style="
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      font-size: 14px;
+      color: #434343;
+    "
+  >
+    <div
+      style="
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 45px 30px 60px;
+        background: #f4f7ff;
+        border-radius: 8px;
+        background-image: url(https://img.freepik.com/free-photo/thank-you-background-with-flowers_23-2148197914.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: top center;
+        font-size: 14px;
+        color: #434343;
+      "
+    >
+      <header>
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td
+                style="
+                  display: flex;
+                  align-items: center;
+                  font-size: 50px;
+                  font-weight: bold;
+                "
+              >
+                <img
+                  alt=""
+                  src="https://i.postimg.cc/MTpYx13B/logo.png"
+                  height="100px"
+                />
+
+                <span style="padding-top: 10px;">Print360</span>
+              </td>
+
+              <td style="text-align: right;">
+                <span
+                  style="font-size: 16px; line-height: 30px; font-weight: bolder;"
+                  >${date}</span  
+                >
+              </td> 
+            </tr>
+          </tbody>
+        </table>
+      </header>
+      <main>
+        <div
+          style="
+            margin-top: 60px;
+            padding: 92px 30px 115px;
+            background: #ffffff;
+            border-radius: 30px;
+            text-align: center;
+          "
+        >
+          <div style="width: 100%; max-width: 489px; margin: 0 auto;">
+            <h1
+              style="
+                margin: 0;
+                font-size: 24px;
+                font-weight: 500;
+                color: #1f1f1f;
+              "
+            >
+              Subscription Confirmation
+            </h1>
+            <p style="margin: 0; margin-top: 17px; font-size: 16px;">
+              Hello,
+            </p>
+            <p style="margin: 16px 0 0 0;">
+              You have received a new message through the subscription form.
+            </p>
+            <p style="margin: 16px 0 0 0;">
+              <strong>Phone Number:</strong> ${data.mobile}
+            </p>
+            <p
+              style="
+                margin: 30px 0 0 0;
+                font-weight: 500;
+              "
+            >
+              Need to follow up? Contact us at
+              <a
+                href="mailto:Print360Official.help@gmail.com"
+                style="color: #499fb6; text-decoration: none;"
+              >
+                Print360Official.help@gmail.com
+              </a>.
+            </p>
+          </div>
+        </div>
+
+        <p
+          style="
+            margin-top: 40px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: #434343;
+          "
+        >
+          Thank you, <br />
+          The Print360 Team
+        </p>
+      </main>
+
+      <footer
+        style="
+          margin-top: 50px;
+          text-align: center;
+          font-size: 14px;
+          color: #8c8c8c;
+        "
+      >
+        <p style="margin: 0;">
+          Print360
+        </p>
+        <p style="margin: 4px 0;">
+          Noida, Uttar Pradesh 226013.
+        </p>
+        <p style="margin: 4px 0;">
+          Copyright © 2024. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
+`;
     } else if (template == "contact") {
       userSubject = "Thank You for Contacting Print360!";
       userText = `
@@ -1262,40 +1427,58 @@ Please follow up as needed.
       },
     });
 
-    const internalMailOptions = {
-      from: "Print360🖨️<Print360Official.help@gmail.com>",
-      to: cc,
-      subject: subject,
-      text: text,
-      html: html,
-      attachments: data.artwork
-        ? [{ filename: data.artworkName, path: data.artwork }]
-        : [],
-    };
+    if (template == "contact-number") {
+      const internalMailOptions = {
+        from: "Print360🖨️<Print360Official.help@gmail.com>",
+        to: cc,
+        subject: subject,
+        text: text,
+        html: html,
+      };
 
-    const userMailOptions = {
-      from: "Print360🖨️<Print360Official.help@gmail.com>",
-      to: data.email,
-      subject: userSubject,
-      text: userText,
-      html: userHtml,
-      attachments: data.artwork
-        ? [{ filename: data.artworkName, path: data.artwork }]
-        : [],
-    };
+      const result = await transport.sendMail(internalMailOptions);
 
-    const result = await transport.sendMail(internalMailOptions);
-    const userResult = await transport.sendMail(userMailOptions);
-
-    if (data.artwork) {
-      fs.unlinkSync(data.artwork);
-    }
-
-    // Check if both emails were accepted for delivery
-    if (result.accepted.length > 0 && userResult.accepted.length > 0) {
-      return true;
+      if (result.accepted.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      const internalMailOptions = {
+        from: "Print360🖨️<Print360Official.help@gmail.com>",
+        to: cc,
+        subject: subject,
+        text: text,
+        html: html,
+        attachments: data.artwork
+          ? [{ filename: data.artworkName, path: data.artwork }]
+          : [],
+      };
+
+      const userMailOptions = {
+        from: "Print360🖨️<Print360Official.help@gmail.com>",
+        to: data.email,
+        subject: userSubject,
+        text: userText,
+        html: userHtml,
+        attachments: data.artwork
+          ? [{ filename: data.artworkName, path: data.artwork }]
+          : [],
+      };
+
+      const result = await transport.sendMail(internalMailOptions);
+      const userResult = await transport.sendMail(userMailOptions);
+
+      if (data.artwork) {
+        fs.unlinkSync(data.artwork);
+      }
+
+      // Check if both emails were accepted for delivery
+      if (result.accepted.length > 0 && userResult.accepted.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
   } catch (error) {
     console.error("Error in sendMail function:", error);
