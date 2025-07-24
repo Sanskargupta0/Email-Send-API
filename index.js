@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.get("/health_check", (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).send("Email Service Health Check");
 });
 
