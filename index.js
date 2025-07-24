@@ -27,6 +27,11 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
+  res.status(200).send("Email Service is running");
+});
+
+
+app.get("/health_check", (req, res) => {
   res.status(200).send("Email Service Health Check");
 });
 
