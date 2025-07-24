@@ -22,4 +22,6 @@ jobs:
         run: pip install requests
 
       - name: Run keep-alive script
+        env:
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: python keep-server-alive/main.py

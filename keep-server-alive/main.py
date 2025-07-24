@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 import requests
 import datetime
-import dotenv
+import os
 
 def ping_backend():
-    url =  dotenv.get_key("keep-server-alive/.env.example", "BACKEND_URL")+ "/health_check"
+    backend_url = os.environ.get("BACKEND_URL")
+    if not backend_url:
+        print("Error: BACKEND_URL environment variable not set")
+        return
+    
+    url = backend_url + "/health"  # Assuming the health endpoint is at /health
     if not url:
         print("Error: BACKEND_URL not set in .env file")
         return
